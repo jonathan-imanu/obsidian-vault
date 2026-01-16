@@ -1,6 +1,6 @@
-# Obsidian Vault Sync
+# Obsidian Vault
 
-Minimal pipeline to sync Obsidian notes to a personal portfolio website. Built for my specific Obsidian usage and portfolio setup.
+My personal vault and a minimal pipeline to sync Obsidian notes to my personal portfolio website. Built for my specific Obsidian usage and portfolio setup.
 
 ## How It Works
 
