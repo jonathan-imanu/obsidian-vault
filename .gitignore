@@ -2,6 +2,8 @@
 TODO.md
 projects/
 interviews/
+private/
+.obsidian
 
 # Generated from local script runs. We don't want to commit these.
 processed-notes
