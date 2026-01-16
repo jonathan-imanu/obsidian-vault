@@ -1,0 +1,17 @@
+# Obsidian Sync Ignore File
+# Patterns to exclude from website sync
+# Supports glob patterns (e.g., *.md, **/private/**)
+
+# Private directories (already in .gitignore, but listed here for clarity)
+**/interviews/**
+**/projects/**
+TODO.md
+
+# Obsidian config files
+.obsidian/
+
+# Temporary files
+*.base
+Untitled*.md
+Untitled*.base
+

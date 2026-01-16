@@ -1,0 +1,9 @@
+# Notes that I don't want to commit.
+TODO.md
+projects/
+interviews/
+
+# Generated from local script runs. We don't want to commit these.
+processed-notes
+
+node_modules

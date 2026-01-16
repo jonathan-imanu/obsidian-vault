@@ -1,0 +1,25 @@
+{
+  "name": "obsidian-vault-sync",
+  "version": "1.0.0",
+  "description": "Sync Obsidian notes to website",
+  "type": "module",
+  "main": "scripts/process-notes.js",
+  "scripts": {
+    "process": "node scripts/process-notes.js",
+    "test": "node scripts/process-notes.js --test"
+  },
+  "keywords": [
+    "obsidian",
+    "markdown",
+    "sync"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "minimatch": "^10.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0"
+  }
+}
