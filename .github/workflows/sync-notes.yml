@@ -1,0 +1,83 @@
+name: Sync Notes to Website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "vault/**/*.md"
+      - "vault/**/*.png"
+      - "vault/**/*.jpg"
+      - "vault/**/*.jpeg"
+      - "vault/**/*.gif"
+      - "vault/**/*.svg"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout vault repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Detect changed vault files
+        run: |
+          git diff --name-status HEAD~1 HEAD | \
+            grep '^[AMD]' | \
+            grep '^[AMD]\s*vault/' | \
+            grep -E '\.(md|png|jpg|jpeg|gif|svg)$' > changed-files.txt || true
+
+      - name: Process notes
+        run: |
+          if [ -s changed-files.txt ]; then
+            node scripts/process-notes.js --diff-file=changed-files.txt
+          else
+            node scripts/process-notes.js
+          fi
+
+      - name: Checkout portfolio repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.WEBSITE_REPO }}
+          token: ${{ secrets.WEBSITE_REPO_TOKEN }}
+          path: portfolio
+
+      - name: Update portfolio website
+        run: |
+          cd portfolio
+
+          # Create directories if they don't exist
+          mkdir -p src/data/notes public/images
+
+          # Copy processed notes to src/data/notes
+          if [ -d "../processed-notes/notes" ]; then
+            cp -r ../processed-notes/notes/*.json src/data/notes/ || true
+          fi
+
+          # Copy index as notes-index.json to src/data/
+          if [ -f "../processed-notes/index.json" ]; then
+            cp ../processed-notes/index.json src/data/notes-index.json
+          fi
+
+          # Copy images to public/images
+          if [ -d "../processed-notes/images" ]; then
+            cp -r ../processed-notes/images/* public/images/ || true
+          fi
+
+          git config user.name "Notes Sync"
+          git config user.email "actions@github.com"
+
+          # Stage all changes
+          git add src/data/notes/ src/data/notes-index.json public/images/
+
+          # Commit and push (exit 0 if no changes)
+          git commit -m "chore: update notes from Obsidian vault" || exit 0
+          git push
