@@ -57,7 +57,6 @@ export async function getFileDate(filePath) {
  * Searches in note directory, then recursively in vault
  */
 export async function findImageFile(imageName, noteDir) {
-  // First try same directory as note
   const sameDirPath = path.join(noteDir, imageName);
   try {
     await fs.access(sameDirPath);
@@ -81,9 +80,6 @@ export async function findImageFile(imageName, noteDir) {
   }
 }
 
-/**
- * Copy images to output directory
- */
 export async function copyImages(note, filePath) {
   const imagesDir = path.join(OUTPUT_DIR, "images");
   await fs.mkdir(imagesDir, { recursive: true });
@@ -95,7 +91,6 @@ export async function copyImages(note, filePath) {
     const imageName = path.basename(imagePath);
 
     try {
-      // Find the image file in the vault
       const sourcePath = await findImageFile(imageName, noteDir);
       if (!sourcePath) {
         console.warn(
@@ -104,7 +99,6 @@ export async function copyImages(note, filePath) {
         continue;
       }
 
-      // Copy to output directory
       const destPath = path.join(imagesDir, imageName);
       await fs.copyFile(sourcePath, destPath);
       copiedImages.push(imagePath);
