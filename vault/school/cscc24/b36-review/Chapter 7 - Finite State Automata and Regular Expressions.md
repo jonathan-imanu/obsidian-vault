@@ -35,6 +35,18 @@ A **Nondeterministic Finite State Automata (NFSA)** is finite state automaton wh
 
 Similarly to a DFSA, a NFSA is a quintuple $M = (Q, \sum, \delta, s, F)$. The key difference is that the transition function $\delta: Q X (\sum \cup \{ \epsilon\}) \rightarrow P(Q)$. The ETF for NFSA follows from this definition and is similar to that of a DFSA.
 
+# 7.7 Pumping Lemma
+
+FSA has a fixed number of states so it can only "remember" so much. 
+
+The *Pumping Lemma* states that any sufficiently long string of a regular language $L$ has a nonempty substring which can be repeated (“pumped”) an arbitrary number of times, with the resulting string still being in $L$.
+
+Formally:
+
+**Pumping Lemma**: Let $L \subseteq \sum^*$  be a regular language. Then there is some $n \in \mathbb{N}$ (that depends on $L$) so that every $x \in L$ that has length $n$ or more satisfies the following property:
+- There are $u,v,w \in \sum^*$ such that $x = uvw$, $v \neq \epsilon, |uv| \leq n$ and $uv^kw \in L$ for all $k \in \mathbb{N}$ 
+
+
 
 
 
