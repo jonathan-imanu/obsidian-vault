@@ -45,9 +45,3 @@ Formally:
 
 **Pumping Lemma**: Let $L \subseteq \sum^*$  be a regular language. Then there is some $n \in \mathbb{N}$ (that depends on $L$) so that every $x \in L$ that has length $n$ or more satisfies the following property:
 - There are $u,v,w \in \sum^*$ such that $x = uvw$, $v \neq \epsilon, |uv| \leq n$ and $uv^kw \in L$ for all $k \in \mathbb{N}$ 
-
-
-
-
-
-

@@ -42,6 +42,3 @@ A **pushdown automaton (PDA)** is a tuple $M = (Q, \sum, \gamma, \delta, q_0, F)
 - $F \subseteq Q$ is the set of accepting states
 	- $\delta$ is the transition function $\delta: Q \times (\sum \cup \{ \epsilon \}) \times (\gamma \cup \{ \epsilon \}) \rightarrow P(Q \times (\gamma \cup \{ \epsilon \}))$
 	- $\delta$ maps to a state, an input symbol and a stack symbol to a set of pairs each consisting of a stack and stack symbol. 
-
-
- 
