@@ -28,6 +28,30 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Checkout portfolio repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.PORTFOLIO_REPO }}
+          token: ${{ secrets.PORTFOLIO_REPO_TOKEN }}
+          path: portfolio
+
+      - name: Load existing index and notes from portfolio
+        run: |
+          # Copy existing index from portfolio repo to processed-notes so incremental processing can merge with it
+          mkdir -p processed-notes/notes
+          if [ -f portfolio/src/data/notes-index.json ]; then
+            cp portfolio/src/data/notes-index.json processed-notes/index.json
+            echo "Loaded existing index from portfolio repo"
+          else
+            echo "No existing index found, starting fresh"
+          fi
+          
+          # Copy existing note JSON files so they're preserved during incremental updates
+          if [ -d portfolio/src/data/notes ]; then
+            cp -r portfolio/src/data/notes/*.json processed-notes/notes/ 2>/dev/null || true
+            echo "Preserved existing note JSON files"
+          fi
+
       - name: Detect changed vault files
         run: |
           git diff --name-status HEAD~1 HEAD | \
@@ -42,13 +66,6 @@ jobs:
           else
             node scripts/process-notes.js
           fi
-
-      - name: Checkout portfolio repo
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ secrets.PORTFOLIO_REPO }}
-          token: ${{ secrets.PORTFOLIO_REPO_TOKEN }}
-          path: portfolio
 
       - name: Update portfolio website
         run: |
