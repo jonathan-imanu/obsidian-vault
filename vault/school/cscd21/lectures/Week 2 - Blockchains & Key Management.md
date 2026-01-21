@@ -89,10 +89,28 @@ No concept of on-chain identity.
 
 In RSA, this maximum value (call it _max_) is obtained by multiplying two random prime numbers. The public and private keys are two specially chosen numbers that are greater than zero and less than the maximum value, call them _pub_ and _priv_. To encrypt a number you multiply it by itself _pub_ times, making sure to wrap around when you hit the maximum. To decrypt a message, you multiply it by itself _priv_ times and you get back to the original number.
 
-## Seeds and Mnemonic Codes
+# Some important **B**itcoin **I**mprovement **P**roposals (**BIP**) 
 
-Generate a private key from a mnemonic seed phrase. Each word comes from a wordlist of 2048 words with some useful properties to make memorizing sentences easier.
+## BIP 39: Seeds and Mnemonic Codes
 
+Generates a 512 bit seed from a mnemonic phrase. 
+- Each word comes from a wordlist of 2048 words with some useful properties to make memorizing sentences easier. 
+- There are 11 bits per word
+- There is also an optional passphrase
+## BIP 32: Deriving child keys from a master key using a tree-like structures
 
+![[HD Wallets.png]]
+
+A hierarchical deterministic wallet (or "HD Wallet") is a wallet that generates all of its keys and addresses from a single source.
+
+- **Hierarchical** – The keys and addresses can be organized into a _tree_.
+- **Deterministic** – The keys and addresses are always generated in the _same way_.
+## BIP 44: 
+
+BIP 44 keys are derived from a BIP39 mnemonic phrase and a BIP32 key derivation path. A BIP 44 path has the following structure:
+
+```
+m / purpose' / cointype' / account' / change / address_index
+```
 
 
