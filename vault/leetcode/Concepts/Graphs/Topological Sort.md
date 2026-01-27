@@ -16,7 +16,6 @@ def kahn_topo_sort(graph: dict[int[List[int]]]) -> List[int]:
 		if node not in indegrees:
 			indegrees[node] = 0
 		for neighbour in neighbours:
-			
 			indegrees[neighbour] += 1
 	
 	q = deque()

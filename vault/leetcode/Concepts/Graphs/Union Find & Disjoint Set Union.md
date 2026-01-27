@@ -23,3 +23,5 @@ def unionByRank(i, j):
 		rank[irep] += 1
 	return True
 ```
+
+$O(\alpha(n))$ amortized time per operation, where $\alpha(n)$ is the inverse Ackermann function and can be thought of to be a constant.

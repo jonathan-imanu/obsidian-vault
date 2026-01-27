@@ -9,7 +9,7 @@
 To minimize, move locally down. 
 #### Problem
 
-Given $x_0, L, \epsilon \in \mathbb{R}$ where $\epsilon > 0$ and a function a real differentiable function $f$ whose derivative at an arbitrary point can be evaluated at unit cost.
+Given $x_0, L, \epsilon \in \mathbb{R}$ where $\epsilon > 0$ and a real differentiable function $f$ whose derivative at an arbitrary point can be evaluated at unit cost.
 
 We want to output $x^* \in I$ such that $| f(x^*) - f^* | \leq \epsilon$ where $f^* = min_{x ∈ I} {( f(x) )}$ and $I = [ x_0 - L , x_0 + L ]$
 
@@ -52,8 +52,7 @@ Think of a server scheduling requests that start at some time and take some time
 - Output: A valid $T \subseteq S$ such that $|T| = t^*$ where $t^* = max_{\textit{valid } T' \subseteq S} (|T'|)$
 	- Just find the largest possible valid subset of intervals
 	- Continuing with the server analogy, maximize the number of requests our server can handle. 
-
-#### Solution
+#### Slower Solution
 
 Realize that simple greedy approaches don't work:
 - take shortest
@@ -138,6 +137,34 @@ Fixing such a $J'$, if $f(J') < f(I_{i + 1})$ then our algorithm considered $J$ 
 
 Since $J' \in O^i$ and $O^i$ is valid then it means that $J$ is disjoint from all items in $T$, the algorithm added $J'$ to $T^j$ since we added $I_{i + 1}$ in iteration $i + 1$ then it must be the case that $I_{i + 1} \cap J' = \emptyset$ 
 
+#### Optimized Interval Scheuduling
+
+1. Sort the intervals $S$ by right endpoints, in increasing order
+2. $T = \emptyset$, $I_{last} = [ -2, -1]$
+3. For each interval $I \in S$ in sorted order,
+	1. If $s(I) > f(I_{last})$: let $T = T \cup \{ I \}$ and let $I_{last} = I$
+4. Output $T$
+
+This new implementation runs in time $O(n log n)$
+##### Proof of TC
+
+We represent $T$ as an array of integers (indices of intervals in $T$) appearing after the input.
+- Sorting the input can be done in time $O(n log n)$
+- Loop has $n$ iterations
+	- In each iteration, we compare constantly many integers and update constantly. Thus each iteration takes $O(1)$ time
+##### Proof of Lemma
+
+At iteration $i \in [n]$ of the algorithm, $T^{i - 1} \cup \{ I_i \}$ is valid iff. $s(I_i) > f(I_i)$, where $I_i$ is the last interval added to $T^{i -1}$ prior to iteration $i$
+###### Proof of $\rightarrow$ 
+
+Assume $T^{i - 1} \cup \{ I_{i}\}$ is valid. Since intervals are considered in ascending order of right endpoint, $f(I_i) \geq f(I_{last})$. Hence $s(I_i) > f(I_{last})$ as otherwise they would intersect. 
+###### Proof of $\leftarrow$
+
+Assume $s(I_i) > f(I_i)$. Since the algorithm considers intervals in ascending order of right endpoints, and $I_{last}$ was the last interval added to $T$. $f(J) \leq f(I_{last})$. $\forall J \in T^{i -1}, f(I_{last}) < s(I_i)$, hence $I_I \cap J = \emptyset, \forall J \in T^{i - 1}$  
+### Independent Set
+
+Input: graph $G = (V, E)$
+Output: independent set $S \subseteq V$ such that $|S| = s^*$ where $s^* = max_{\textup{}}$
 # Kleinberg & Tardos - MST Algorithms
 
 ## Problem
