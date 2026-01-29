@@ -49,6 +49,26 @@ A string is ambiguous with respect to a grammar iff that grammar generates two o
 **Tutorial Comment:** A red flag for ambiguity in CFG's is one production becoming two of itself.
 ### Adding Precedence
 
-When changing a grammar to include precedence, we want the operations with higher precedence to appear closer to the root of the parse tree. Higher precedence operations should appear closer to the leaves.
-- We'll sometimes care about associativity too
+When changing a grammar to include precedence, we want the operations with lower precedence to appear closer to the root of the parse tree. Higher precedence operations should appear closer to the leaves.
+##### How to actually do this?
+
+We can do this with "chaining" the weaker ops to the next stronger one:
+
+```
+<expn> --> <expn> <add-op> <expn> | <mult-exp>
+<mult-exp> --> <mult-exp> <mult-op> <mult-exp> | <pow-exp>
+<pow-exp> --> <pow-exp> ^ <pow-exp> | <br-exp>
+<br-exp> --> (<expn>) | <simple>
+<simple> --> <identifier> | <literal>
+<add-op> --> + | -
+<mult-op> --> * | /
+```
+
+Notice how addition "chains" to multiplication which then "chains" to power and so on.
+- **This is an incorrect grammar since it isn't associative** 
+### Adding Associativity
+
+For left-associative operators, put the recursive term before the non-recursive term in a production rule. For right-associative operators, put it after
+
+
 

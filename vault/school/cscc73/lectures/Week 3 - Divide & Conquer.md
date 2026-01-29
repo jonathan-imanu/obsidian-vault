@@ -113,6 +113,83 @@ $$= c \cdot (2n)^{1 + log(3/2)} - c'(2n)$$
 **Informally:**
 
 Let $T(n) = a \cdot T(n /b)$ + (relatively small "combine" runtime) then $T(n) = O(n^c)$ where $c = log_b(a)$
+- We make $a$ recursive calls, at each recursive call we divide the input by $b$
+	- So at the $i$th level, we make $a^i$ recursive calls with an input size of $n / b^i$ 
+	- We need to hit $\log_b{n}$ levels before reaching a constant size problem
+	- We only care about the last level since it dominates
 
+Here's some work showing that the sum of costs from the last level of the recursive tree will be equal to 
 
+$(\frac{a}{b})^{log_b(n)} \cdot c \cdot n$
+$= b^{log_b(\frac{a}{b}) \log_b(n)}$ 
+$= c \cdot n^{\log_b(\frac{a}{b})}$
+### Formally
 
+For $a,b,d,e \leq 1$, let $T: N \rightarrow N$ such that $T(n) \leq a \cdot T(\ceil{n / b}) + e \cdot n^d$ for any sufficiently large $n$. Let $c = \log_b(a)$.
+
+1. If $c$ > $d$, then $T(n) = O(n^c)$
+2. If $c = d$, then $T(n) = O(n^c \cdot \log(n))$ 
+	1. This is the annoyingly tight case
+3. If $c < d$, then $T(n) = O(n^d)$ 
+
+##### Using the Master Theorem with Merge Sort
+
+We make two recursive calls to input length $n / 2$. So $a = 2$ and $b = 2$. Thus $c = \log_2(2) = 1$.
+The combine step is in linear time, therefore $d = 1$. 
+
+By the master theorem, this has running time $O(n \log n)$.
+## Matrix Multiplication
+
+#### Approach 1: Brute Force
+
+**Input**: Two matrices $A$ and $B$ of size $n \times n$, each with $n^2$ elements. 
+**Output**: $C = AB$, an $n \times n$ matrix
+
+We know that an element of $C$, call it $c_{ij} = \sum a_{ik} \cdot b_{kj}$ 
+- This takes time $O(n)$ for $n$ multiplications and additions
+- We have $n^2$ elements to figure out 
+- Thus the total brute force TC will be $O(n^3)$
+#### Approach 2: A Bad Divide & Conquer
+
+We assume that $n = 2^x$ for some integer $x$
+
+The idea is we divide the matrix into four quadrants.
+
+Then we can join them back up with
+
+$C = (A_{11}B_{11} + A_{12}B_{21})$
+
+## Polynomials
+
+We care about univariate complex polynomials. These are defined like: $p(x) = \sum_{i = 0}^{d} c_i \cdot x^i$ 
+#### Fundamental Theorem of Algebra
+
+A polynomial of degree $d$ either is constantly zero or has at most $d$ roots.
+##### Cor. 
+
+For every distinct $x_1 \ldots x_{d+1} \in \mathbb{C}$ and every $y_1 \ldots y_{d + 1} \in \mathbb{C}$ there <u>exists</u> a <u>unique</u> polynomial of degree at most $d$ such that $p(x_i) = y_i \forall i$
+
+**Proof**
+
+There exists a $p(x) = \sum_{i \in [d + 1]} y_i \cdot \prod_{j \in [d + 1] \ i} \frac{x - x_i}{x_i - x_j}$ 
+- The part of $\prod$ is a function that gives 1 for $x_i$ and 0 for $x_j$ when $j \neq i$ 
+
+Let $p_1$ and $p_2$ be two degree $d$ such that $p_1(x_i) = p_2(x_i) = y_i \forall i$ 
+
+Define $p(x) = p_1 + p_2$ THEN:
+1. $deg(p) \leq d$ 
+2. The number of roots of $p$ is at least $d + 1$
+
+But this violates the FTA! So $p(x)$ must be constantly zero. So there can only be one polynomial of at most $d$ such that $p(x_i) = y_i \forall i$.
+#### Eval. Representation
+
+Fix distinct $x_0 \ldots x_{n - 1}$. Then let the $(x_0, y_0)$ pair mean that $y_0$ is the value of the polynomial at $x_0$. 
+- We know how to represent things in coefficient representation.
+
+### The Evaluation Problem
+
+### The Interpolation Problem
+
+## DFT
+
+#### Naive Attempt 1
