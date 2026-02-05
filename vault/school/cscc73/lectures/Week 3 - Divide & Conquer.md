@@ -125,7 +125,7 @@ $= b^{log_b(\frac{a}{b}) \log_b(n)}$
 $= c \cdot n^{\log_b(\frac{a}{b})}$
 ### Formally
 
-For $a,b,d,e \leq 1$, let $T: N \rightarrow N$ such that $T(n) \leq a \cdot T(\ceil{n / b}) + e \cdot n^d$ for any sufficiently large $n$. Let $c = \log_b(a)$.
+For $a,b,d,e \leq 1$, let $T: N \rightarrow N$ such that $T(n) \leq a \cdot T(\lceil n / b \rceil) + e \cdot n^d$ for any sufficiently large $n$. Let $c = \log_b(a)$.
 
 1. If $c$ > $d$, then $T(n) = O(n^c)$
 2. If $c = d$, then $T(n) = O(n^c \cdot \log(n))$ 
@@ -185,11 +185,82 @@ But this violates the FTA! So $p(x)$ must be constantly zero. So there can only 
 
 Fix distinct $x_0 \ldots x_{n - 1}$. Then let the $(x_0, y_0)$ pair mean that $y_0$ is the value of the polynomial at $x_0$. 
 - We know how to represent things in coefficient representation.
+##### Converting to Coefficient Representation - Using Lagrange (Naive)
 
+$P(x) = \sum_{i=1}^n y_i \ell_i(x), \quad \ell_i(x) = \prod_{j \neq i} \frac{x - x_j}{x_i - x_j}$
+
+Has TC $O(n^2)$
+##### Converting from Coefficient Representation to Eval. 
+
+This is more straightforward, for each $x_i \in \{x_1, \ldots, x_n \}$ just plug it in.
+- $n$ points and we'll have to make $n$ iterations (one for each coefficient) at every iteration, hence we have TC $O(n^2)$ 
 ### The Evaluation Problem
 
+**Input**: A univariate polynomial $P: \mathbb{C} \rightarrow \mathbb{C}$ of degree at most $n - 1$ represented as $n$ coefficients, and $n$ distinct points $x_1, \ldots x_n \in \mathbb{C}$
+
+**Output**: The evaluations of $P$ at $x_1, \ldots, x_n$, $(x_1, P(x_1)),\ldots, (x_n,(P(x_n)))$
 ### The Interpolation Problem
 
-## DFT
+**Input**: A univariate polynomial $P: \mathbb{C} \rightarrow \mathbb{C}$ of degree at most $n - 1$ represented as evaluations at $n$ distinct points in $\mathbb{C}$, $(x_1, P(x_1)),\ldots, (x_n,(P(x_n)))$
 
-#### Naive Attempt 1
+**Output**: The $n$ coefficients of $P$
+
+- With coefficient representation, it is easy to see that an algorithm that solves this problem would have TC `O(n)`
+- With the evaluation representation, it is fastest to convert to coefficient 
+# DFT: Discrete Fourier Transform (DFT)
+
+${DFT}_{n}$ 
+
+- **Input**: The coefficients of $P$ of degree at most $n - 1$
+- **Output**: $P(\omega_{n}^{0}, \ldots, \omega_{n}^{n})$ 
+
+${DFT}_{n}^{-1}$ 
+
+- **Input**: $P(\omega_{n}^{0}), \ldots P(\omega_{n}^{n})$
+- **Output**: The coefficients of $P$ of degree at most $n - 1$
+### What are the Omega's?
+
+$\boxed{\omega_n = e^{2\pi i / n}}$ 
+
+- $\omega_n$ is a **primitive** $n^{th}$ root of unity
+- This means:
+    - $\omega_n^n = 1$
+    - $\omega_n^k \neq 1$ for 0 < k < n
+        
+All powers $\omega_n^0, \omega_n^1, \dots, \omega_n^{n-1}$ are the **distinct complex roots of unity**.
+
+We use these because $|(\omega_n)^2| = |\omega_{n}|/2$, at the end we'll end up with 1. 
+## Naive Approaches for a D&C Algorithm
+
+#### Approach 1: Split the List of Points
+
+**Idea:** Split the list of points:
+
+$W_{left} = (\omega_{n}^{0}, \ldots, \omega_{n}^{n/2 - 1}))$ 
+$W_{right} = (\omega_{n}^{n/2}, \ldots, \omega_{n}^{n}))$
+#### Approach 2: Split the Polynomial
+
+**Idea**: Split the polynomial:
+
+$P(x) = P_{left}(x) + P_{right}(x^{n/2})$
+### Analysis
+
+The same problem exists for both of these algorithms: the D&C step doesn't do anything! The combine step is still expensive and the algorithm still takes time $O(n^2)$
+## Cooley-Turkey FFT Algorithm (coef. to eval.)
+
+
+## Using FFT to compute Inverse DFT (eval. to coef.)
+
+### Intuition
+
+Use the Vandermonde matrix. 
+### Basic Steps
+
+1. Let $f(x) = \sum_{i = 0}^{n - 1} P(\omega_{n}^{i} x^i)$
+2. Compute DFT(f) using FFT
+	1. Time $O(n \log n)$
+3. Output $c_0, \ldots, c_{n-1}$ such that $c_i = \frac{1}{n}f(\omega_{n}^{n - i})$
+
+
+
+

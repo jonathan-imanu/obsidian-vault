@@ -204,13 +204,65 @@ In the end the constructed spanning tree will be minimal.
 
 If the graph was originally not connected, then there doesn't exist a spanning tree, so the number of selected edges will be less than  $n - 1$ .
 
-Actual Python Code:
+**Actual Python Code:**
+
+If the Graph is Sparse and implicit, has **TC** `O(E log V)`
 
 ```python
+selected = [False] * n
+min_heap = [(0, 0)]
+remaining_vertices = n
+min_cost = 0
 
+while min_heap:
+	cost, vertex = heapq.heappop(min_heap)
+	if selected[vertex]:
+		continue
+	selected[vertex] = True
+	remaining_vertices -= 1
+	min_cost += cost
+	
+	if remaining_vertices == 0:
+		return min_cost
+	
+	for edge_cost, neighbour in graph[vertex]:
+		if selected[neighbour]: continue
+		heapq.heappush(min_heap, (edge_cost, neighbour))
 ```
 
-**TC**: 
+If the Graph is dense/explicit (each vertex is connected to every other vertex). Then it makes more sense to compute costs on the fly:
+
+```python
+n = len(points)
+in_mst = [False] * n
+minDist = [float('inf')] * n
+minDist[0] = 0 # pick 0 arb.
+res = 0
+		
+for _ in range(n):
+	# pick next node with smallest cost to connect
+	next_node = -1
+	smallest_cost = float('inf')
+	
+	for node in range(n):
+		if not in_mst[node] and minDist[node] < smallest_cost:
+			smallest_cost = minDist[node]
+			next_node = node
+
+	in_mst[next_node] = True
+	res += smallest_cost
+
+	x1, y1 = points[next_node]
+	# relax edges to all remaining nodes
+	for node in range(n):
+		if not in_mst[node]:
+			x2, y2 = points[node]
+			d = abs(x1 - x2) + abs(y1 - y2)
+			if d < minDist[node]:
+				minDist[node] = d
+return res
+```
+
 #### When to use Prim's over Kruskal's
 
 From this StackOverflow [thread](https://stackoverflow.com/questions/1195872/when-should-i-use-kruskal-as-opposed-to-prim-and-vice-versa):

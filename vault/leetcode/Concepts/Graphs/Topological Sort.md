@@ -32,6 +32,9 @@ def kahn_topo_sort(graph: dict[int[List[int]]]) -> List[int]:
 				q.append(neighbour)
 		result.append(node)
 	
+	# handle cycle with the below:
+	# if len(result) != len(graph):
+		# do something!
 	return result
 ```
 

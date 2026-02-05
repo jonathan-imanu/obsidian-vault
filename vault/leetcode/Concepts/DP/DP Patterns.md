@@ -295,3 +295,13 @@ We can also this LIS with binary search in a much faster way. **TODO**
 5. [473. Matchsticks to Square](https://leetcode.com/problems/matchsticks-to-square/)
 6. [2035. Partition Array Into Two Arrays to Minimize Sum Difference](https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/)
 
+## 15. DP on Trees
+
+Thinking about states is all that's really needed for most of these I feel. Maybe the occasional caching of results.
+
+1. ~~[337. House Robber III](https://leetcode.com/problems/house-robber-iii/)
+2. ~~[124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
+3. [968. Binary Tree Cameras](https://leetcode.com/problems/binary-tree-cameras/)
+
+## 16. DP on Graphs
+
