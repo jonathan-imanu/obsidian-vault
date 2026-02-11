@@ -47,3 +47,14 @@ Polynomial in $n$ and the number $W$ which can be thought of as a parameter. $W$
 	- Cost of non-edges
 #### Representation of Inputs
 
+### SSSP: Bellman-Ford
+
+- Fix $s \in [n]$
+- For every $v \in [n]$, let $w^*(v) = dist(s, v)$
+- For every $v \in [n]$ and $i \in [n - 1]$, let $w^*(i)$ be the minimal weight of a path from $s$ to $v$ of length at most $i$
+#### **Lemma** 
+
+For all $v \in [n],$ we have $w^*(v)= w^*(v, n-1)$
+##### Proof
+
+For every $s,t \in v$ there is a shortest path of length less than $n - 1$. 

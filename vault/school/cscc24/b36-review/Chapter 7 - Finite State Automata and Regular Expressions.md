@@ -1,6 +1,8 @@
 # 7.1 Regular Expressions
 
-An **alphabet** is a set $\sum$  whose elements are called **symbols**. A string, over a specified alphabet $\sum$ is a finite sequence of symbols from $\sum$. The empty sequence is a string and is denoted $\epsilon$. The set of all strings over alphabet $\sum$ is denoted $\sum^*$ 
+An **alphabet** is a set $\sum$  whose elements are called **symbols**. A string, over a specified alphabet $\sum$ is a finite sequence of symbols from $\sum$. The empty sequence is a string and is denoted $\epsilon$. 
+
+The set of all strings over alphabet $\sum$ is denoted $\sum^*$ 
 
 A **language** (over alphabet $\sum$) is a subset of $\sum^*$
 

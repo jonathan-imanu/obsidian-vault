@@ -182,13 +182,7 @@ Given a set of vertices $V = \{v_1, v_2, v_3, \ldots v_n \}$ and a set of *posit
 	1. If adding $e$ to $T$ causes a cycle, skip it
 	2. Else, $T = T \cup e$
 
-Actual Python Code:
-
-```python
-
-```
-
-**TC**: 
+**TC**: $O(E \log E)$
 ### Prim's Algorithm
 
 *This is kinda like Dijkstra's*

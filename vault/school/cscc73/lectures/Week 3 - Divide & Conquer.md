@@ -155,11 +155,24 @@ We assume that $n = 2^x$ for some integer $x$
 
 The idea is we divide the matrix into four quadrants.
 
-Then we can join them back up with
+Let $A_0$, $A_1$, $A_2$, $A_3$ be the top-left quadrant, top-right quadrant, bottom-left quadrant and the bottom-right quadrant.
 
-$C = (A_{11}B_{11} + A_{12}B_{21})$
+Given the same notations for $B$, we can say that $C$ is:
 
+$C_0 = A_0 \times B_0 + A_1 \times B_2$ 
+$C_1 = A_0 \times B_1 + A_1 \times B_3$
+$C_2 = A_2 \times B_0 + A_3 \times B_2$ 
+$C_3 = A_2 \times B_1 + A_3 \times B_3$ 
+
+So 8 matrix multiplications and 4 additions. 
+
+Using Master's Theorem, we make 8 recursive calls on inputs of size $\frac{n}{2}$ and the combine step has time $O(n^2)$ so $a = 8, b = 2, d = 2$. Thus $c = \log_{2}(8) = 3$. Since $c > d$, we have $T \in O(n^c) = O(n^3)$.
+#### Approach 3: Strassen
+
+He found a way to make it 7 multiplications instead of 8. So it's much faster.
 ## Polynomials
+
+[Good Reference](https://www.cs.toronto.edu/~denisp/csc373/docs/tutorial3-adv-writeup.pdf)
 
 We care about univariate complex polynomials. These are defined like: $p(x) = \sum_{i = 0}^{d} c_i \cdot x^i$ 
 #### Fundamental Theorem of Algebra
@@ -246,21 +259,11 @@ $P(x) = P_{left}(x) + P_{right}(x^{n/2})$
 ### Analysis
 
 The same problem exists for both of these algorithms: the D&C step doesn't do anything! The combine step is still expensive and the algorithm still takes time $O(n^2)$
-## Cooley-Turkey FFT Algorithm (coef. to eval.)
 
+#### Approach 3: DFTs
 
-## Using FFT to compute Inverse DFT (eval. to coef.)
+Can convert between representations using the roots of unit.
+## Flowchart
 
-### Intuition
-
-Use the Vandermonde matrix. 
-### Basic Steps
-
-1. Let $f(x) = \sum_{i = 0}^{n - 1} P(\omega_{n}^{i} x^i)$
-2. Compute DFT(f) using FFT
-	1. Time $O(n \log n)$
-3. Output $c_0, \ldots, c_{n-1}$ such that $c_i = \frac{1}{n}f(\omega_{n}^{n - i})$
-
-
-
+![[FFT_Flowchart.png]]
 

@@ -46,7 +46,8 @@ A grammar is ambiguous iff it generates a string for which there are two or more
 
 A string is ambiguous with respect to a grammar iff that grammar generates two or more distinct parse trees for the string.
 
-**Tutorial Comment:** A red flag for ambiguity in CFG's is one production becoming two of itself.
+**Tutorial Comment:** *A red flag for ambiguity in CFG's is one production becoming two of itself.*
+- IE: `A ::= A op A`
 ### Adding Precedence
 
 When changing a grammar to include precedence, we want the operations with lower precedence to appear closer to the root of the parse tree. Higher precedence operations should appear closer to the leaves.
@@ -66,9 +67,46 @@ We can do this with "chaining" the weaker ops to the next stronger one:
 
 Notice how addition "chains" to multiplication which then "chains" to power and so on.
 - **This is an incorrect grammar since it isn't associative** 
+###### Generalizing
+
+We can describe this as:
+
+```
+<start> ::= <start> weakest-op <start> | <2nd-ws>
+<2nd-ws> ::= <2nd-ws> 2nd-weakest-op <2nd-ws> | <3rd-ws>
+...
+<strongest-symbol> ::=<strongest-symbol> strongest-op <strongest-symbol> | <terminals>
+```
+
+Of course, this grammar is still ambiguous because of associativity issues (How does one parse `<terminal> weakest-op <terminal> weakest-op <terminal>`) even though we didn't say anything about associativity in this example!
+
+A safe fix is to just apply the left or right associativity rule mentioned below. 
+
+```
+<start> ::= <start> weakest-op <2nd-ws> | <2nd-ws>
+<2nd-ws> ::= <2nd-ws> 2nd-weakest-op <3rd-ws> | <3rd-ws>
+...
+<strongest-symbol> ::= <strongest-symbol> strongest-op <terminals> | <terminals>
+```
 ### Adding Associativity
 
-For left-associative operators, put the recursive term before the non-recursive term in a production rule. For right-associative operators, put it after
+For left-associative operators, put the recursive term before the non-recursive term in a production rule. For right-associative operators, put it after.
+##### Example
 
+We have three operators and terminals defined under `<terminal>`. Suppose the weakest and middle operators are left-associative and the strongest operator is right-associative.
+
+```
+<start> ::= <start> weakest-op <mid-s> | <mid-s>
+<mid-s> ::= <mid-s> middle-op <strongest-s> | <strongest-s>
+<strongest-s> ::= <terminal> strongest-op <strongest-s> | <terminal>
+```
+# Bonus - Chomsky Hierarchy
+
+A linguist who created a hierarchy that ordered languages by expressiveness:
+
+1. Regular Grammars
+2. CFGs
+3. Context-Sensitive Grammars
+4. Phrase-Structure Grammars
 
 

@@ -19,7 +19,6 @@ Given $p(x), q(x)$ in coefficient form and we want their product. The steps and 
 3. We now have $pq$ in evaluation form
 4. We transform $pq$ to coefficient form
 	1. TC is $O(n^2)$
-
 ## $DFT_{n}$
 
 ### Input 
