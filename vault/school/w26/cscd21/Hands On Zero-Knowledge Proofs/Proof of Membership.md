@@ -1,0 +1,1 @@
+A prover demonstrates that they know a secret corresponding to one element of a public set of commitments, without revealing which specific commitment matches their secret.

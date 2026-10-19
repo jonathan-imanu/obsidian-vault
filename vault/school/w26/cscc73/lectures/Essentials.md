@@ -1,0 +1,4 @@
+- The Johnson re-weighting algorithm
+- Flow definitions, the 4 facts:
+	- 1 - 3 facts are the posted proof
+	- 4 is that max flow in matching has k

@@ -11,3 +11,4 @@ private/
 processed-notes
 
 node_modules
+.omx/

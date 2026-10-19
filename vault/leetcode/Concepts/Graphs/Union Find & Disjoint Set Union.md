@@ -1,8 +1,8 @@
 TLDR: Given objects that relate to each other in some way and we want to repeatedly group them together based on some heuristic. Best example is finding a redundant connection in a graph.
 
 ```python
-parent = list(range(len(edges) + 1))
-rank = [0] * (len(edges) + 1)
+parent = list(range(len(vertices) + 1))
+rank = [0] * (len(vertices) + 1)
 
 def find(i):
 	if parent[i] != i:
