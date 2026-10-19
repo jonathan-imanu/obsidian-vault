@@ -1,6 +1,7 @@
 name: Sync Notes to Website
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
@@ -10,6 +11,10 @@ on:
       - "vault/**/*.jpeg"
       - "vault/**/*.gif"
       - "vault/**/*.svg"
+      - "scripts/**"
+      - ".obsidian-sync-ignore"
+      - "package*.json"
+      - ".github/workflows/sync-notes.yml"
 
 jobs:
   sync:
@@ -17,8 +22,6 @@ jobs:
     steps:
       - name: Checkout vault repo
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -35,37 +38,11 @@ jobs:
           token: ${{ secrets.PORTFOLIO_REPO_TOKEN }}
           path: portfolio
 
-      - name: Load existing index and notes from portfolio
-        run: |
-          # Copy existing index from portfolio repo to processed-notes so incremental processing can merge with it
-          mkdir -p processed-notes/notes
-          if [ -f portfolio/src/data/notes-index.json ]; then
-            cp portfolio/src/data/notes-index.json processed-notes/index.json
-            echo "Loaded existing index from portfolio repo"
-          else
-            echo "No existing index found, starting fresh"
-          fi
-          
-          # Copy existing note JSON files so they're preserved during incremental updates
-          if [ -d portfolio/src/data/notes ]; then
-            cp -r portfolio/src/data/notes/*.json processed-notes/notes/ 2>/dev/null || true
-            echo "Preserved existing note JSON files"
-          fi
-
-      - name: Detect changed vault files
-        run: |
-          git diff --name-status HEAD~1 HEAD | \
-            grep '^[AMD]' | \
-            grep '^[AMD]\s*vault/' | \
-            grep -E '\.(md|png|jpg|jpeg|gif|svg)$' > changed-files.txt || true
+      - name: Test note sync
+        run: node --test scripts/*.test.js
 
       - name: Process notes
-        run: |
-          if [ -s changed-files.txt ]; then
-            node scripts/process-notes.js --diff-file=changed-files.txt
-          else
-            node scripts/process-notes.js
-          fi
+        run: node scripts/process-notes.js
 
       - name: Update portfolio website
         run: |
@@ -74,10 +51,8 @@ jobs:
           # Create directories if they don't exist
           mkdir -p src/data/notes public/images
 
-          # Copy processed notes to src/data/notes
-          if [ -d "../processed-notes/notes" ]; then
-            cp -r ../processed-notes/notes/*.json src/data/notes/ || true
-          fi
+          # Mirror generated notes, including removals after moves/deletions.
+          rsync -a --delete ../processed-notes/notes/ src/data/notes/
 
           # Copy index as notes-index.json to src/data/
           if [ -f "../processed-notes/index.json" ]; then

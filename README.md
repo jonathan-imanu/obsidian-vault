@@ -6,15 +6,16 @@ My personal vault and a minimal pipeline to sync Obsidian notes to my personal p
 
 ![pipeline-arch-simple](/pipeline-arch.png)
 
-1. GitHub Actions triggers on changes to `vault/**/*.md` or image files. The workflow runs `node scripts/p   --diff-file=changed-files.txt` with a generated `changed-files.txt`.
-2. `process-notes.js` processes changed files:
+1. GitHub Actions triggers on changes to vault markdown/images, pipeline scripts, or sync configuration. It can also be run manually.
+2. `process-notes.js` rebuilds all notes from the current vault (respecting `.obsidian-sync-ignore`), without merging the old index:
    - Converts Obsidian syntax (wikilinks, image embeds) to standard markdown/HTML
    - Extracts frontmatter (title, date, etc.)
    - Copies referenced images to `processed-notes/images/`
    - Outputs individual note JSON files (`notes/*.json`) with processed content
    - Builds a metadata index (`index.json`) containing all note metadata
-3. Commits processed files to portfolio repo: `src/data/notes/*.json`, `src/data/notes-index.json`, and `public/images/*`
-4. Portfolio loads `notes-index.json` for note listings (metadata only), then lazy-loads individual note JSON files and renders content with `react-markdown`. MathJax is rendered client-side.
+3. Mirrors generated notes to `src/data/notes/` with `rsync --delete`, replaces `src/data/notes-index.json`, and copies images to `public/images/`. Moved, deleted, and newly ignored notes are removed from the website. A note processing error fails the run before publishing.
+4. Commits processed files to the portfolio repo.
+5. Portfolio loads `notes-index.json` for note listings (metadata only), then lazy-loads individual note JSON files and renders content with `react-markdown`. MathJax is rendered client-side.
 
 ## Output Format
 

@@ -118,11 +118,6 @@ async function processFullSync(ignorePatterns, notes) {
   const files = await findMarkdownFiles(ignorePatterns, null);
   console.log(`Found ${files.length} file(s) to process`);
 
-  if (files.length === 0) {
-    console.log("No files to process");
-    return false;
-  }
-
   const notesDir = path.join(OUTPUT_DIR, "notes");
 
   for (const filePath of files) {
@@ -137,7 +132,17 @@ async function processFullSync(ignorePatterns, notes) {
 
       console.log(`Processed: ${note.id}`);
     } catch (error) {
-      console.error(`Error processing ${filePath}: ${error.message}`);
+      throw new Error(`Error processing ${filePath}: ${error.message}`, {
+        cause: error,
+      });
+    }
+  }
+
+  // Remove generated files whose source notes were moved, deleted, or ignored.
+  const noteFiles = new Set(Object.values(notes).map((note) => `${note.id}.json`));
+  for (const filename of await fs.readdir(notesDir)) {
+    if (filename.endsWith(".json") && !noteFiles.has(filename)) {
+      await fs.unlink(path.join(notesDir, filename));
     }
   }
 
@@ -170,8 +175,7 @@ async function main() {
   const ignorePatterns = await loadIgnorePatterns();
   console.log(`Loaded ${ignorePatterns.length} ignore patterns`);
 
-  const existingIndex = await loadExistingIndex();
-  const notes = { ...existingIndex.notes };
+  const notes = diffFilePath ? { ...(await loadExistingIndex()).notes } : {};
 
   const notesDir = path.join(OUTPUT_DIR, "notes");
   await fs.mkdir(notesDir, { recursive: true });
