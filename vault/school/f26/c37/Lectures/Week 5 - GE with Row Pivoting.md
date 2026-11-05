@@ -248,3 +248,5 @@ Say $L_1' = P_2 L_1 P_2$
 Jut pick stage $k + 1$ and proceed with the factorization as the $k^{th}$ column is already zero!
 - However $a_{kk} \implies U$ is singular (non-invertible)
 	- A zero in a diagonal entry means that our determinant will be zero
+
+

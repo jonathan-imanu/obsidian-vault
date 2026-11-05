@@ -116,3 +116,10 @@ $$
 $$
 
 So when $x \approx -y$, the error toward for additions gets very large very quickly
+
+### A1 Learnings
+
+1. When calculating machine epilson, mention whether using chopping as opposed to rounding and understand the differences between them.
+2. When giving a counterexample, state: 
+	1. Let the FP# be regular decimal system with mantissa 2 and assume rounding
+3. When doing subtractive cancellation, only include the cases that will have a significant effect on the result
